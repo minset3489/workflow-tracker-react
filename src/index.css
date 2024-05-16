@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.App{
+    @apply flex
+}
+.App.container{
+    @apply grow px-14 py-0
+}
