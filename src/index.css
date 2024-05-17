@@ -1,3 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* base styles */
+body {
+    @apply font-body m-0 text-xl bg-bg;
+}
+
+ul, li, p, h1, h2, h3, h4 {
+  @apply m-0 p-0;
+}
+ul {
+  @apply list-none;
+}
+
+/* App */
+
+.App{
+    @apply flex
+}
+.App.container{
+    @apply grow px-14 py-0
+}
+
+/* layout */
+.page-title {
+  @apply text-base text-heading inline-block; 
+}
+.btn {
+  @apply bg-white py-2 px-3 rounded text-primary border border-primary cursor-pointer text-base;
+}
+.btn:hover {
+  @apply text-white bg-primary;
+}
+
+/* forms */
+label {
+  @apply block my-6; 
+}
+label span {
+  @apply block mb-1; 
+}
+input, textarea {
+  @apply py-2 px-1 text-base text-heading w-full box-border border border-gray-300 rounded;
+}
+textarea {
+  @apply h-40; 
+}
+.error {
+  @apply text-red-700 bg-red-100 border border-red-700 rounded p-2 my-4; 
+}
