@@ -6,9 +6,16 @@ export default {
   ],
   theme: {
     extend: {
+      filter: {
+        'invert-25': 'invert(25%)',
+        'invert-40': 'invert(40%)',
+        'invert-100': 'invert(100%)',
+      },
+
       fontFamily: {
         body: ['Poppins','sans-serif']
       },
+      
       colors: {
         'heading': '#444',
         'text':'#999',
