@@ -22,14 +22,14 @@ const Sidebar = () => {
                         <li className="mt-3">
                             <NavLink
                                 to="/"
-                                className={`flex p-3 no-underline w-full text-white box-border ${pathname === '/' ? 'text-gray-600 bg-bg rounded-tl-lg' : ''}`}
+                                className={`flex p-3 no-underline w-full text-white box-border ${pathname === '/' ? 'text-gray-700 bg-bg rounded-tl-lg' : ''}`}
                             >
                                 <img className={`mr-3 filter-invert-100 ${pathname === '/' ? 'opacity-60' : ''}`} src={DashboardIcon} alt="dashboard icon" />
                                 <span>Dashboard</span>
                             </NavLink>
                             <NavLink
                                 to="/project"
-                                className={`flex p-3 no-underline w-full text-white box-border ${pathname === '/project' ? 'text-gray-600 bg-bg rounded-tl-lg' : ''}`}
+                                className={`flex p-3 no-underline w-full text-white box-border ${pathname === '/project' ? 'text-gray-700 bg-bg rounded-tl-lg' : ''}`}
                             >
                                 <img className={`mr-3 filter-invert-100 ${pathname === '/project' ? ' opacity-60' : ''}`} src={AddIcon} alt="add project icon" />
                                 <span>New Project</span>
