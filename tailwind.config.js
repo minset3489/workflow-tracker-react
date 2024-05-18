@@ -8,6 +8,8 @@ export default {
     extend: {
       filter: {
         'invert-25': 'invert(25%)',
+        'invert-40': 'invert(40%)',
+        'invert-100': 'invert(100%)',
       },
 
       fontFamily: {
