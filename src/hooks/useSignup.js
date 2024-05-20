@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { auth } from '../firebase/config';
 import { useAuthContext } from './useAuthContext';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { db } from '../firebase/config';
+import { doc, setDoc } from 'firebase/firestore';
 import useStorage from './useStorage';
 
 export const useSignup = () => {
@@ -29,6 +31,13 @@ export const useSignup = () => {
       // add display name to user
       await updateProfile(res.user, { displayName, photoURL });
 
+      // create a user document
+      await setDoc(doc(db, 'users', res.user.uid), { 
+        online: true,
+        displayName,
+        photoURL,
+      });
+
       // dispatch login action
       dispatch({ type: 'LOGIN', payload: res.user });
 
@@ -42,9 +51,7 @@ export const useSignup = () => {
         setIsPending(false);
       }
     } finally {
-
         setIsPending(false);
-
     }
   };
 
