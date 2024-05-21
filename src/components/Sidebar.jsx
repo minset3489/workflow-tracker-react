@@ -3,6 +3,9 @@ import { NavLink, useLocation } from "react-router-dom";
 
 import DashboardIcon from "./../assets/dashboard_icon.svg";
 import AddIcon from "./../assets/add_icon.svg";
+import Avatar from "./Avatar";
+
+import {useAuthContext} from '../hooks/useAuthContext'
 
 const Sidebar = () => {
     // Get the current location using useLocation hook
@@ -10,12 +13,14 @@ const Sidebar = () => {
     // Extract the pathname from the location object
     const { pathname } = location;
 
+    const {user} = useAuthContext()
+
     return (
         <div className="w-72 min-w-72 min-h-dvh bg-primary box-border relative text-white">
             <div className="fixed w-72">
                 <div className="font-bold text-center tracking-wide py-10 px-8 border-b border-solid border-gray-300 border-opacity-20">
-                    {/* avatar and username here later */}
-                    <p>Hey user</p>
+                    {user?.photoURL && <Avatar src={user.photoURL} />}
+                    <p>Hey {user?.displayName}</p>
                 </div>
                 <nav className="mt-20 ml-8">
                     <ul>
