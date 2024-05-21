@@ -3,8 +3,13 @@ import { NavLink } from 'react-router-dom';
 import { useLogout } from '../hooks/useLogout';
 
 import Temple from '../assets/temple.svg'
+import { useAuthContext } from '../hooks/useAuthContext';
+
+
 
 const Navbar = () => {
+
+    const { user } = useAuthContext()
 
     const {logout, isPending} =useLogout()
 
@@ -17,24 +22,29 @@ const Navbar = () => {
                 </li>
 
                 <li>
-                    <NavLink className=" mr-5 no-underline text-gray-500" to="/login">Login</NavLink>                    
+                    {!user && <NavLink className=" mr-5 no-underline text-gray-500" to="/login">Login</NavLink>}
+                                        
                 </li>
 
                 <li>
-                    <NavLink className=" mr-5 no-underline text-gray-500" to="/signup">Signup</NavLink>
+                    {!user && <NavLink className=" mr-5 no-underline text-gray-500" to="/signup">Signup</NavLink>}
                 </li>
 
                 <li>
-                    {!isPending && 
-                        <button className='btn' onClick={logout}>
-                            Logout
-                        </button>
+                    {user && <>
+                        {!isPending && 
+                            <button className='btn' onClick={logout}>
+                                Logout
+                            </button>
+                        }
+                        {isPending && 
+                            <button className='btn' disabled>
+                                Logging out...
+                            </button>
+                        }
+                    </>
                     }
-                    {isPending && 
-                        <button className='btn' disabled>
-                            Logging out...
-                        </button>
-                    }
+                    
                     
                 </li>
             </ul>

@@ -11,28 +11,28 @@ const Sidebar = () => {
     const { pathname } = location;
 
     return (
-        <div className="w-[300px] min-w-[300px] bg-primary min-h-dvh box-border relative text-white">
-            <div className="fixed w-auto">
+        <div className="w-72 min-w-72 min-h-dvh bg-primary box-border relative text-white">
+            <div className="fixed w-72">
                 <div className="font-bold text-center tracking-wide py-10 px-8 border-b border-solid border-gray-300 border-opacity-20">
                     {/* avatar and username here later */}
                     <p>Hey user</p>
                 </div>
-                <nav className="mt-20 ml-5">
+                <nav className="mt-20 ml-8">
                     <ul>
                         <li className="mt-3">
                             <NavLink
                                 to="/"
-                                className={`flex p-3 no-underline w-full text-white box-border ${pathname === '/' ? 'text-gray-700 bg-bg rounded-tl-lg' : ''}`}
+                                className={`flex p-3 no-underline w-full text-white box-border ${pathname === '/' ? '!text-primary bg-bg rounded-l-lg' : ''}`}
                             >
-                                <img className={`mr-3 filter-invert-100 ${pathname === '/' ? 'opacity-60' : ''}`} src={DashboardIcon} alt="dashboard icon" />
-                                <span>Dashboard</span>
+                                <img className={`mr-3 filter-invert-100 ${pathname === '/' ? 'opacity-50' : ''}`} src={DashboardIcon} alt="dashboard icon" />
+                                <span >Dashboard</span>
                             </NavLink>
                             <NavLink
                                 to="/project"
-                                className={`flex p-3 no-underline w-full text-white box-border ${pathname === '/project' ? 'text-gray-700 bg-bg rounded-tl-lg' : ''}`}
+                                className={`flex p-3 no-underline w-full text-white box-border ${pathname === '/project' ? ' !text-primary bg-bg rounded-l-lg' : ''}`}
                             >
-                                <img className={`mr-3 filter-invert-100 ${pathname === '/project' ? ' opacity-60' : ''}`} src={AddIcon} alt="add project icon" />
-                                <span>New Project</span>
+                                <img className={`mr-3 filter-invert-100 ${pathname === '/project' ? ' opacity-50' : ''}`} src={AddIcon} alt="add project icon" />
+                                <span >New Project</span>
                             </NavLink>
                         </li>
                     </ul>
