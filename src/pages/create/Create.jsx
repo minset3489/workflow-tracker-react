@@ -1,6 +1,11 @@
+
+
 const Create = () => {
     return ( <>
-    <div>Create</div>
+    <div className="create-form">
+        
+
+    </div>
     </> );
 }
  
