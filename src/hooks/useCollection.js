@@ -1,56 +1,45 @@
-import { useState, useEffect, useRef } from 'react';
-import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
-import { db } from '../firebase/config';
+import { useEffect, useState, useRef } from "react";
+import { db } from "../firebase/config";
+import { collection, query, where, orderBy, onSnapshot } from "firebase/firestore";
 
-const useCollection = (collectionName, options = {}) => {
-  const [documents, setDocuments] = useState([]);
+const useCollection = (collectionName, _query, _orderBy) => {
+  const [documents, setDocuments] = useState(null);
   const [error, setError] = useState(null);
-  const unsubscribeRef = useRef(null);
+
+  // if we don't use a ref --> infinite loop in useEffect
+  // _query is an array and is "different" on every function call
+  const queryRef = useRef(_query).current;
+  const orderByRef = useRef(_orderBy).current;
 
   useEffect(() => {
-    const getCollection = async () => {
-      try {
-        let colRef = collection(db, collectionName);
+    let ref = collection(db, collectionName);
 
-        // Add where clause based on conditions
-        if (options.conditions) {
-          options.conditions.forEach(condition => {
-            const { field, operator, value } = condition;
-            colRef = query(colRef, where(field, operator, value));
-          });
-        }
+    if (queryRef && orderByRef) {
+      ref = query(ref, where(...queryRef), orderBy(...orderByRef));
+    } else if (queryRef) {
+      ref = query(ref, where(...queryRef));
+    } else if (orderByRef) {
+      ref = query(ref, orderBy(...orderByRef));
+    }
 
-        // Add sorting options based on the selected field and direction
-        if (options.field && options.direction) {
-          colRef = query(colRef, orderBy(options.field, options.direction));
-        }
+    const unsubscribe = onSnapshot(ref, (snapshot) => {
+      let results = [];
+      snapshot.docs.forEach(doc => {
+        results.push({ ...doc.data(), id: doc.id });
+      });
 
-        unsubscribeRef.current = onSnapshot(colRef, (snapshot) => {
-          let results = [];
-          snapshot.docs.forEach((doc) => {
-            results.push({ ...doc.data(), id: doc.id });
-          });
+      // update state
+      setDocuments(results);
+      setError(null);
+    }, (error) => {
+      console.log(error);
+      setError('Could not fetch the data');
+    });
 
-          setDocuments(results);
-          setError(null);
-        }, (err) => {
-          console.error('Error fetching documents:', err.message);
-          setError(err.message);
-        });
-      } catch (err) {
-        console.error('Error setting up collection listener:', err.message);
-        setError(err.message);
-      }
-    };
+    // unsubscribe on unmount
+    return () => unsubscribe();
 
-    getCollection();
-
-    return () => {
-      if (unsubscribeRef.current) {
-        unsubscribeRef.current();
-      }
-    };
-  }, [collectionName, options]);
+  }, [collectionName, queryRef, orderByRef]);
 
   return { documents, error };
 };
