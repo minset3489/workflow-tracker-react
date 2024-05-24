@@ -16,7 +16,7 @@ const Sidebar = () => {
     const {user} = useAuthContext()
 
     return (
-        <div className="w-72 min-w-72 min-h-dvh bg-primary box-border relative text-white">
+        <div className="w-72 min-w-72 bg-primary h-lvh box-border relative text-white">
             <div className="fixed w-72">
                 <div className="font-bold text-center tracking-wide py-10 px-8 border-b border-solid border-gray-300 border-opacity-20">
                     {user?.photoURL && <Avatar src={user.photoURL} />}

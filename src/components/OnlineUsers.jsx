@@ -5,7 +5,7 @@ const OnlineUsers = () => {
   const { documents, error } = useCollection('users');
 
   return (<> 
-    <div className="w-64 min-w-64 min-h-dvh bg-gray-50 box-border text-heading">
+    <div className="w-64 min-w-64 bg-gray-50 box-border text-heading">
         <div className="w-64">
             <div className="text-right py-10 px-3 border-b border-solid border-gray-300 text-xl">
                 <h2>All Users</h2>

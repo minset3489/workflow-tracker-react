@@ -16,7 +16,7 @@ const Signup = () => {
     setThumbnail(null);
     let selected = e.target.files[0];
     if (selected && types.includes(selected.type)) {
-      if (selected.size > 200000) {
+      if (selected.size > 2000000) {
         setFileError('Image file size must be less than 200kb');
         return;
       }

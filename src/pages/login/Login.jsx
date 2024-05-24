@@ -18,7 +18,7 @@ const Login = () => {
 
     return ( <>
     <form className="max-w-[400px] my-16 mx-auto p-10 border border-gray-300 shadow-md bg-white" onSubmit={handleSubmit}>
-      <h2 className="font-bold">Sign up</h2>
+      <h2 className="font-bold">Login</h2>
       <label>
         <span>Email :</span>
         <input
