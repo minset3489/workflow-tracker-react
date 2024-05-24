@@ -1,25 +1,24 @@
-import { Outlet,  } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
-// Component
-
+// Components
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
+import OnlineUsers from "../components/OnlineUsers";
 
 
-export default function RootLayout() {
-
+export default function RootLayout(user) {
 
 
   return (
     <div className="flex">
-        <Sidebar/>
-        <div className="grow px-14 py-0">
-            <Navbar/>
+      <Sidebar />
+      <div className="grow px-14 py-0">
+        <Navbar />
         <main>
-            <Outlet />
+          <Outlet />
         </main>
-
-        </div>
+      </div>
+      {user && <OnlineUsers />}
     </div>
-  )
+  );
 }

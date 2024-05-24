@@ -1,52 +1,43 @@
 import PropTypes from "prop-types";
+import { createContext, useEffect, useReducer } from "react";
+import { auth } from './../firebase/config';
 
-import { createContext, useEffect, useReducer } from "react"
-
-import {auth} from './../firebase/config'
-
-
-
-export const AuthContext = createContext()
+export const AuthContext = createContext();
 
 export const authReducer = (state, action) => {
-    switch (action.type) {
-      case 'LOGIN':
-        return { ...state, user: action.payload }
-      case 'LOGOUT':
-        return { ...state, user: null }
-      case 'AUTH_IS_READY':
-        return { user: action.payload, authIsReady: true }
-      default:
-        return state
-    }
+  switch (action.type) {
+    case 'LOGIN':
+      return { ...state, user: action.payload };
+    case 'LOGOUT':
+      return { ...state, user: null };
+    case 'AUTH_IS_READY':
+      return { user: action.payload, authIsReady: true };
+    default:
+      return state;
   }
-
+};
 
 export const AuthContextProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(authReducer, {
+    user: null,
+    authIsReady: false,
+  });
 
-    const [state, dispatch] = useReducer(authReducer,{
-        user:null,
-        authIsReady: false
-    })
+  useEffect(() => {
+    const unsub = auth.onAuthStateChanged((user) => {
+      dispatch({ type: 'AUTH_IS_READY', payload: user });
+      unsub(); // Ensure unsub is called after setting state to avoid memory leaks
+    });
+  }, []);
 
-    useEffect(()=> {
-        const unsub = auth.onAuthStateChanged( user => {
-            
-            dispatch({type : 'AUTH_IS_READY', payload : user})
-        
-            unsub()
-        })
-    },[])
+  console.log('AuthContext state:', state);
 
-    return (
-        <>
-        <AuthContext.Provider value={{...state, dispatch}}>
-            {children}
-        </AuthContext.Provider>
-        </>
-    )
-}
-
+  return (
+    <AuthContext.Provider value={{ ...state, dispatch }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
 AuthContextProvider.propTypes = {
   children: PropTypes.node.isRequired,
