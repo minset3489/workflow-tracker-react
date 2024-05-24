@@ -1,10 +1,14 @@
-import { useEffect, useState } from "react";
-import Select from 'react-select';
-import useCollection from '../../hooks/useCollection';
-import { Timestamp } from "firebase/firestore";
-import { useAuthContext } from '../../hooks/useAuthContext';
-import { useFirestore } from "../../hooks/useFirestore";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react"
+import Select from 'react-select'
+import { useNavigate } from "react-router-dom"
+
+import { useAuthContext } from '../../hooks/useAuthContext'
+// import { useFirestore } from "../../hooks/useFirestore"
+import useCollection from "../../hooks/useCollection"
+
+import { db } from '../../firebase/config'
+import { Timestamp , addDoc, collection } from 'firebase/firestore'
+
 
 const categories = [
   { value: 'development', label: 'Development' },
@@ -14,35 +18,38 @@ const categories = [
 ];
 
 const Create = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  const [name, setName] = useState('');
-  const [details, setDetails] = useState('');
-  const [dueDate, setDueDate] = useState('');
-  const [category, setCategory] = useState(null);
-  const [assignedUsers, setAssignedUsers] = useState([]);
-  const [formError, setFormError] = useState(null);
+  const [name, setName] = useState('')
+  const [details, setDetails] = useState('')
+  const [dueDate, setDueDate] = useState('')
+  const [category, setCategory] = useState(null)
+  const [assignedUsers, setAssignedUsers] = useState([])
+  const [formError, setFormError] = useState(null)
+  const [isPending, setIsPending] = useState(false)
 
-  const { documents, error } = useCollection('users'); // Using the useCollection hook
-  const [users, setUsers] = useState([]);
+  const { documents: userDocuments, error: userError } = useCollection('users')
+  const [users, setUsers] = useState([])
+  const { user } = useAuthContext()
 
-  const { user } = useAuthContext();
-  const { addDocument, response } = useFirestore('projects');
+
+  
 
   useEffect(() => {
-    if (documents) {
-      setUsers(documents.map(user => {
+    if (userDocuments) {
+      setUsers(userDocuments.map(user => {
         return { value: { ...user, id: user.id }, label: user.displayName };
       }));
     }
-  }, [documents]);
+  }, [userDocuments]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setFormError(null);
-
+    e.preventDefault()
+    setFormError(null)
+    setIsPending(true)
     if (!name || !details || !dueDate || !category || assignedUsers.length < 1) {
       setFormError('Please fill out all fields and assign the project to at least one user.');
+      setIsPending(false)
       return;
     }
 
@@ -56,24 +63,35 @@ const Create = () => {
       return {
         displayName: u.value.displayName,
         photoURL: u.value.photoURL,
-        id: u.value.uid
+        id: u.value.id
       };
     });
 
-    const project = {
-      name,
-      details,
-      category: category.value,
-      dueDate: Timestamp.fromDate(new Date(dueDate)),
-      comments: [],
-      createdBy,
-      assignedUsers: assignedUsersList
-    };
 
-    await addDocument(project);
-    if (!response.error) {
+    try {
+
+      if (assignedUsersList.length === 0) {
+        throw new Error('Please assign the project to at least one user.');
+      }
+      
+      await addDoc(collection(db, 'projects'), {
+        name: name || '',
+        details: details || '',
+        createdBy,
+        assignedUsersList,
+        category: category?.value || '',
+        dueDate: dueDate ? Timestamp.fromDate(new Date(dueDate)) : '',
+        comments: ['No comments']
+      });
+      console.log('project added');
       navigate('/');
+    } catch (error) {
+      console.error('Error adding document: ', error);
+      setFormError(error.message);
+    } finally {
+      setIsPending(false);
     }
+
   };
 
   return (
@@ -122,9 +140,9 @@ const Create = () => {
             isMulti
           />
         </label>
-        <button className="btn">Add Project</button>
+        {isPending ? <button className="btn">Adding...</button> : <button className="btn">Add Project</button>}
         {formError && <p className="error">{formError}</p>}
-        {error && <p className="error">{error}</p>}
+        {userError && <p className="error">{userError}</p>}
       </form>
     </div>
   );
