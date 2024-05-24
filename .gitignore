@@ -23,5 +23,5 @@ dist-ssr
 *.sln
 *.sw?
 
-# Exclude firebase config
+# Exclude firebase config updated
 /src/firebase/config.js
