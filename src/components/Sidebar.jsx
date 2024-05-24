@@ -33,7 +33,7 @@ const Sidebar = () => {
                                 <span >Dashboard</span>
                             </NavLink>
                             <NavLink
-                                to="/project"
+                                to="/create"
                                 className={`flex p-3 no-underline w-full text-white box-border ${pathname === '/project' ? ' !text-primary bg-bg rounded-l-lg' : ''}`}
                             >
                                 <img className={`mr-3 filter-invert-100 ${pathname === '/project' ? ' opacity-50' : ''}`} src={AddIcon} alt="add project icon" />

@@ -1,16 +1,18 @@
-import useCollection from '../../hooks/useCollection'
+import ProjectList from '../../components/ProjectList';
+import useCollection from '../../hooks/useCollection';
 
 const Dashboard = () => {
-    const {documents,error} = useCollection('projects')
+    const { documents, error } = useCollection('projects');
 
-
-    return ( <>
-    <div>
-        <h2>Dahsboard</h2>
-        {error && <p className='error'>{error}</p>}
-        {documents && documents.map( doc => (<p key={doc.id}>{doc.name}</p>))}
-    </div>
-    </> );
+    return (
+        <>
+            <div>
+                <h2>Dashboard</h2>
+                {error && <p className='error'>{error}</p>}
+                {documents && <ProjectList projects={documents} />}
+            </div>
+        </>
+    );
 }
- 
+
 export default Dashboard;
