@@ -41,6 +41,8 @@ const ProjectSummary = ({ project }) => {
       {user.uid === project.createdBy.id && (
         <button onClick={handleClick} className="btn mt-4">Mark as Complete</button>
       )}
+
+      
     </div>
   );
 };

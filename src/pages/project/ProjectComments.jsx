@@ -3,6 +3,7 @@ import { doc, updateDoc, arrayUnion, Timestamp } from "firebase/firestore";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { db } from "../../firebase/config";
 import Avatar from "../../components/Avatar";
+import { formatDistanceToNow } from "date-fns";
 
 const ProjectComments = ({ project }) => {
   const { user } = useAuthContext();
@@ -49,7 +50,7 @@ const ProjectComments = ({ project }) => {
                 <p className="text-sm font-medium ml-2">{comment.displayName}</p>
               </div>
               <p className="text-xs text-gray-500">
-                {comment.createdAt ? new Date(comment.createdAt.toDate()).toLocaleString() : "Loading..."}
+                {comment.createdAt ? formatDistanceToNow(comment.createdAt.toDate(),{addSuffix:true}) : "Loading..."}
               </p>
               <p className="mt-2 text-sm">{comment.content}</p>
             </li>
