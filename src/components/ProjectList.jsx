@@ -7,7 +7,7 @@ const  ProjectList =  ({ projects }) => {
 
   return (
     <>
-    <div className="project-list mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div className="project-list mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
       {projects.length === 0 && <p className="text-center">No projects yet!</p>}
       {projects.map(project => (
         <NavLink to={`/project/${project.id}`} key={project.id} className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md">
