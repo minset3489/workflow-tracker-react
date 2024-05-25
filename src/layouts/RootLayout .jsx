@@ -6,7 +6,7 @@ import Sidebar from "../components/Sidebar";
 import OnlineUsers from "../components/OnlineUsers";
 
 
-export default function RootLayout(user) {
+export default function RootLayout({user}) {
 
 
   return (
