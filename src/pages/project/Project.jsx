@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useDocument } from '../../hooks/useDocument';
 import ProjectSummary from "./ProjectSummary";
+import ProjectComments from "./ProjectComments";
 
 const  Project = () => {
   const { id } = useParams();
@@ -14,8 +15,9 @@ const  Project = () => {
   }
 
   return (
-    <div className="grid grid-cols-3 gap-16">
+    <div className="flex flex-col gap-16">
       <ProjectSummary project={document} />
+      <ProjectComments project={document}/>
     </div>
   );
 }

@@ -81,7 +81,7 @@ const Create = () => {
         assignedUsersList,
         category: category?.value || '',
         dueDate: dueDate ? Timestamp.fromDate(new Date(dueDate)) : '',
-        comments: ['No comments']
+        comments: []
       });
       console.log('project added');
       navigate('/');

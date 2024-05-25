@@ -1,47 +1,55 @@
 import { useState } from "react";
-import { serverTimestamp } from "firebase/firestore";
+import { doc, updateDoc, arrayUnion, Timestamp } from "firebase/firestore";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { useFirestore } from "../../hooks/useFirestore";
+import { db } from "../../firebase/config";
 import Avatar from "../../components/Avatar";
 
 const ProjectComments = ({ project }) => {
   const { user } = useAuthContext();
-  const { updateDocument, response } = useFirestore("projects");
   const [newComment, setNewComment] = useState("");
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null); // Reset the error state
 
     const commentToAdd = {
       displayName: user.displayName,
       photoURL: user.photoURL,
       content: newComment,
-      createdAt: serverTimestamp(),
+      createdAt: Timestamp.fromDate(new Date()),
       id: Math.random(),
     };
 
-    await updateDocument(project.id, {
-      comments: [...project.comments, commentToAdd],
-    });
-    if (!response.error) {
+    console.log(commentToAdd)
+
+    const projectRef = doc(db, "projects", project.id);
+
+    try {
+      await updateDoc(projectRef, {
+        comments: arrayUnion(commentToAdd),
+      });
       setNewComment("");
+    } catch (err) {
+      console.log(err.message)
+      setError("Could not add comment");
     }
   };
 
   return (
-    <div className="project-comments">
+    <div >
       <h4 className="text-lg font-semibold">Project Comments</h4>
 
       <ul>
         {project.comments.length > 0 &&
           project.comments.map((comment) => (
-            <li key={comment.id} className="p-4 rounded border shadow-md">
+            <li key={comment.id} className="p-4 bg-white my-2 rounded border shadow-md">
               <div className="flex items-center mb-2">
                 <Avatar src={comment.photoURL} />
-                <p className="text-sm font-medium">{comment.displayName}</p>
+                <p className="text-sm font-medium ml-2">{comment.displayName}</p>
               </div>
               <p className="text-xs text-gray-500">
-                {new Date(comment.createdAt?.toDate()).toLocaleString()}
+                {comment.createdAt ? new Date(comment.createdAt.toDate()).toLocaleString() : "Loading..."}
               </p>
               <p className="mt-2 text-sm">{comment.content}</p>
             </li>
@@ -61,9 +69,9 @@ const ProjectComments = ({ project }) => {
           Add Comment
         </button>
       </form>
+      {error && <p className="text-red-500">{error}</p>}
     </div>
   );
 }
 
-
-export default ProjectComments
+export default ProjectComments;

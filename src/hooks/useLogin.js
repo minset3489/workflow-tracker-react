@@ -34,14 +34,10 @@ export const useLogin = () => {
         setError(null);
       }
     } catch (err) {
-      console.error("Error during login: ", err);  // Enhanced error logging
-      if (!isCancelled) {
-        setError(err.message);
-        setIsPending(false);
-      }
-    } finally {
-      setIsPending(false);
-    }
+      setIsPending(false)
+      setError(err.message)
+      console.error("Error during login: ", err); 
+    } 
   };
 
   useEffect(() => {
