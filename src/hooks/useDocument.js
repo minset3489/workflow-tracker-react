@@ -1,45 +1,26 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useState } from "react";
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
-const useDocument = (collectionName, documentId) => {
+export const useDocument = (collectionName, id) => {
   const [document, setDocument] = useState(null);
   const [error, setError] = useState(null);
-  const unsubscribeRef = useRef(null);
 
   useEffect(() => {
-    const getDocument = async () => {
-      try {
-        const documentRef = doc(db, collectionName, documentId);
-
-        unsubscribeRef.current = onSnapshot(documentRef, (snapshot) => {
-          if (snapshot.exists()) {
-            setDocument({ ...snapshot.data(), id: snapshot.id });
-            setError(null);
-          } else {
-            console.error('Document does not exist');
-            setError('Document not found');
-          }
-        }, (err) => {
-          console.error('Error fetching document:', err.message);
-          setError(err.message);
-        });
-      } catch (err) {
-        console.error('Error setting up document listener:', err.message);
-        setError(err.message);
+    const unsub = onSnapshot(doc(db, collectionName, id), (snapshot) => {
+      if (snapshot.exists()) {
+        setDocument({ ...snapshot.data(), id: snapshot.id });
+        setError(null);
+      } else {
+        setError('No such document exists');
       }
-    };
+    }, (err) => {
+      console.error('Error fetching document: ', err);
+      setError('Failed to get document');
+    });
 
-    getDocument();
-
-    return () => {
-      if (unsubscribeRef.current) {
-        unsubscribeRef.current();
-      }
-    };
-  }, [collectionName, documentId]);
+    return () => unsub();
+  }, [collectionName, id]);
 
   return { document, error };
 };
-
-export default useDocument;

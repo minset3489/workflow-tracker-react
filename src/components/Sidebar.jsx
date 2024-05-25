@@ -16,7 +16,7 @@ const Sidebar = () => {
     const {user} = useAuthContext()
 
     return (
-        <div className="w-72 min-w-72 bg-primary h-lvh box-border relative text-white">
+        <div className="w-72 min-w-72 min-h-dvh bg-primary box-border relative text-white">
             <div className="fixed w-72">
                 <div className="font-bold text-center tracking-wide py-10 px-8 border-b border-solid border-gray-300 border-opacity-20">
                     {user?.photoURL && <Avatar src={user.photoURL} />}
@@ -33,7 +33,7 @@ const Sidebar = () => {
                                 <span >Dashboard</span>
                             </NavLink>
                             <NavLink
-                                to="/project"
+                                to="/create"
                                 className={`flex p-3 no-underline w-full text-white box-border ${pathname === '/project' ? ' !text-primary bg-bg rounded-l-lg' : ''}`}
                             >
                                 <img className={`mr-3 filter-invert-100 ${pathname === '/project' ? ' opacity-50' : ''}`} src={AddIcon} alt="add project icon" />
